@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: ./todo-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - todo-net
+    environment:
+      - VITE_API_BASE=http://backend:8000
+    restart: unless-stopped
+
+  backend:
+    build: ./todo-backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    networks:
+      - todo-net
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/todos
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    networks:
+      - todo-net
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+networks:
+  todo-net:
+
+volumes:
+  mongo-data:
