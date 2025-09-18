@@ -14,7 +14,11 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # frontend origin
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://todo.local"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
